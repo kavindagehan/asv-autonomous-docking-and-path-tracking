@@ -93,7 +93,7 @@ flowchart LR
 
 ---
 
-#### 📦 MATLAB / Simulink Requirements
+## 📦 MATLAB / Simulink Requirements
 
 This project was developed and validated using:
 
