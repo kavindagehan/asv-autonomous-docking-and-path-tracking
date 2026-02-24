@@ -1,2 +1,12 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Enforce MATLAB language detection for GitHub stats
+*.m linguist-language=MATLAB
+*.mlx linguist-language=MATLAB
+*.slx linguist-language=MATLAB
+*.mdl linguist-language=MATLAB
+
+# Treat these files as binary so Git doesn't try to read them as text, 
+# preventing huge unreadable diffs and line-ending corruption.
+*.slx binary
+*.mlx binary
+*.mat binary
+*.fig binary
