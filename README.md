@@ -1,120 +1,71 @@
 # 🚤 Autonomous ASV Docking and Path Tracking  
 ### MATLAB/Simulink & ROS 2 / Gazebo Integration
 
-This repository features a **Guidance, Navigation, and Control (GNC)** system for a **WAM-V Catamaran**.  
+This repository presents a complete **Guidance, Navigation, and Control (GNC)** system for a **WAM-V Catamaran**.
 
-The project bridges the gap between **3-DOF mathematical modeling** and **high-fidelity physics simulation** in the **VRX (Virtual RobotX)** environment.
+The project integrates a 3-DOF vessel model with high-fidelity physics simulation in the **VRX (Virtual RobotX)** environment, enabling smooth path tracking and precision autonomous docking.
 
 ---
 
 ## ✨ Key Features
 
-- **Adaptive lookahead radius**  
-  Dynamically adjusts the tracking distance for precision maneuvering.
+- **Adaptive Lookahead Guidance**  
+  Dynamically adjusts tracking radius for smooth and stable path convergence.
 
-- **Smooth RPM profile (no spikes)**  
-  Eliminates mechanical stress and jitter through optimized control shaping.
+- **Smooth RPM Profile (No Spikes)**  
+  Eliminates oscillatory thrust behavior common in waypoint-switching methods.
 
-- **Distance-based docking deceleration**  
-  Controlled approach speed for reliable berthing.
+- **Distance-Based Docking Deceleration**  
+  Nonlinear velocity shaping ensures controlled, zero-overshoot berthing.
 
-- **Turn-then-go speed shaping**  
-  Modulates surge velocity based on heading error to ensure safety during sharp turns.
+- **Turn-Then-Go Speed Strategy**  
+  Reduces surge velocity during large heading errors for safe maneuvering.
 
-- **Real-time ROS topic integration**  
-  Seamless communication between Simulink controllers and the Gazebo/VRX physics engine.
-
----
-
-## 🚢 Project Highlights
-
-### 📐 Mathematical Modeling
-
-Implemented **3-DOF planar dynamics** for a catamaran platform, accounting for added mass and hydrodynamic drag.
-
-Surge:
-$$
-m(\dot{u} - vr) = F_x - d_{11}u
-$$
-
-Sway:
-$$
-m(\dot{v} + ur) = F_y - d_{22}v
-$$
-
-Yaw:
-$$
-I_{zz}\dot{r} = N - d_{33}r
-$$
+- **Real-Time Simulink–ROS 2 Integration**  
+  High-frequency thrust commands with live GPS and IMU feedback from Gazebo.
 
 ---
 
-### 🎯 Adaptive LOS Guidance
+## 🧠 System Architecture
 
-Developed a **“Rabbit” pursuit algorithm** using quadratic circle-path intersection:
+```
+Path → Adaptive Guidance → Heading & Speed Control → Thrust Mixing → ASV Model → Feedback
+```
 
-\[
-at^2 + bt + c = 0
-\]
+### Control Strategy Overview
 
-This enables smooth, non-oscillatory path following.
-
----
-
-### ⚓ Precision Docking Logic
-
-#### ✅ SQRT Velocity Profile
-Non-linear deceleration curve:
-
-\[
-u_d \propto \sqrt{dist}
-\]
-
-Manages vessel inertia and ensures a precise *soft landing* at the dock.
-
-#### ✅ Heading Latch
-Freezes the reference heading at a **3.5 m radius** to eliminate:
-
-- Mathematical singularities in `atan2`
-- Sensor jitter during final berthing
+- Continuous path tracking (no discrete waypoint jumps)
+- Adaptive lookahead radius near docking zone
+- Heading latch during final approach to avoid instability
+- Differential thrust mixing for twin-hull propulsion
 
 ---
 
-### 🔁 Simulink–ROS Architecture
+## 📊 Performance Improvements
 
-Real-time co-simulation using:
-
-- MATLAB ROS Toolbox  
-- GPS / IMU topic subscription  
-- High-frequency thrust command publishing  
-
----
-
-## 📊 Performance Results
-
-Adaptive Lookahead guidance eliminated the **"saw-tooth" RPM spikes** common in traditional waypoint-switching logic.
+The Adaptive Lookahead strategy eliminates the classic **“saw-tooth” RPM oscillations** seen in baseline waypoint controllers.
 
 | Metric | Baseline (Waypoint) | Optimized (Adaptive LOS) |
 |--------|---------------------|---------------------------|
 | Steering Stability | High-frequency jitter | Smooth transition |
-| Docking Accuracy | Significant overshoot | Zero-overshoot stopping |
-| RPM Profile | Saw-tooth oscillations | Stable cruise & ramp-down |
+| Docking Accuracy | Overshoot | Zero-overshoot stopping |
+| RPM Behavior | Oscillatory | Stable ramp-down |
 
 ---
 
 ## 🛠 Tech Stack
 
-- **Operating System:** Ubuntu 24.04 LTS (Noble Numbat)  
-- **Middleware:** ROS 2 Jazzy Jalisco  
-- **Software:** MATLAB & Simulink R2025b  
+- **OS:** Ubuntu 24.04 LTS  
+- **Middleware:** ROS 2 Jazzy  
+- **Modeling:** MATLAB & Simulink  
 - **Simulation:** Gazebo Harmonic + VRX  
-- **Automation:** Python-based XML injection for 3D trajectory visualization  
+- **Automation:** Python (Gazebo XML path injection)
 
 ---
 
 ## 🚀 Installation & Setup
 
-### 1️⃣ Clone the Repository
+### Clone Repository
 
 ```bash
 git clone https://github.com/your-username/asv-autonomous-docking-and-path-tracking.git
@@ -123,13 +74,13 @@ cd asv-autonomous-docking-and-path-tracking
 
 ---
 
-### 2️⃣ MATLAB Setup
+### MATLAB Setup
 
-1. Open **MATLAB R2025b**
+1. Open MATLAB
 2. Install:
-   - ROS Toolbox
-   - Control System Toolbox
-3. Add repository folders to MATLAB path:
+   - ROS Toolbox  
+   - Control System Toolbox  
+3. Add project to path:
 
 ```matlab
 addpath(genpath(pwd))
@@ -137,7 +88,7 @@ addpath(genpath(pwd))
 
 ---
 
-### 3️⃣ ROS 2 Environment
+### ROS 2 Setup
 
 Ensure ROS 2 Jazzy is installed:
 
@@ -145,24 +96,24 @@ Ensure ROS 2 Jazzy is installed:
 source /opt/ros/jazzy/setup.bash
 ```
 
-Launch VRX/Gazebo environment before starting Simulink co-simulation.
+Launch the VRX simulation before running Simulink co-simulation.
 
 ---
 
 ## 📂 Project Structure
 
 ```
-/matlab_simulink   → Core controller models (.slx)
-/scripts           → Python utilities (Gazebo XML path injection)
-/docs              → Technical reports & derivations
-/results           → Performance plots & simulation captures
+/matlab_simulink   → Simulink controller models
+/scripts           → Gazebo XML automation tools
+/docs              → Technical documentation
+/results           → Plots and simulation captures
 ```
 
 ---
 
-## 👨‍🎓 Contributor
+## 👨‍🎓 Author
 
 **Gehan Kavinda Dasanayake**  
-Research Project – Carinthia University of Applied Sciences  
+Research Project – Carinthia University of Applied Sciences
 
 ---
