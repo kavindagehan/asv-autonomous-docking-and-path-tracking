@@ -1,41 +1,33 @@
-Autonomous ASV Docking and Path Tracking
+📌 Overview
 
-MATLAB/Simulink & ROS 2 / Gazebo Integration
+This repository presents the modeling, guidance, and control implementation of a 3-DOF Autonomous Surface Vehicle (ASV) based on a catamaran platform.
 
-This repository features a Guidance, Navigation, and Control (GNC) system for a WAM-V Catamaran. The project bridges the gap between 3-DOF mathematical modeling and high-fidelity physics simulation.
+The system integrates:
 
-🚢 Project Highlights
+MATLAB/Simulink dynamic modeling
 
-Mathematical Modeling: Implemented 3-DOF planar dynamics for a catamaran platform, accounting for added mass and hydrodynamic drag coefficients.
+Adaptive Lookahead LOS guidance
 
-Adaptive LOS Guidance: Developed a "Rabbit" pursuit algorithm using quadratic circle-path intersection for smooth, non-oscillatory path following.
+PD-based heading and speed control
 
-Precision Docking Logic:
+Thrust mixing for differential propulsion
 
-SQRT Velocity Profile: Utilized a non-linear deceleration curve to manage vessel inertia and ensure a precise "soft landing" at the dock.
+ROS–Gazebo (VRX) high-fidelity validation
 
-Heading Latch: Freezes the reference heading at a 3.5m radius to eliminate mathematical singularities and sensor jitter during the final berthing approach.
+The controller was validated in the Virtual RobotX (VRX) simulation environment.
 
-Simulink-ROS Architecture: Real-time co-simulation using the MATLAB ROS Toolbox to subscribe to navigation topics (GPS/IMU) and publish high-frequency thrust commands.
+🧠 System Architecture
 
-🛠 Tech Stack
+Path → Guidance → Heading & Speed Control → Thrust Mixing → ASV Model → Feedback
 
-Operating System: Ubuntu 24.04 LTS (Noble Numbat)
+Key features:
 
-Middleware: ROS 2 Jazzy Jalisco
+Adaptive lookahead radius
 
-Software: MATLAB & Simulink R2025b
+Smooth RPM profile (no spikes)
 
-Simulation: Gazebo Harmonic / VRX (Virtual RobotX)
+Distance-based docking deceleration
 
-Automation: Python-based XML injection for 3D trajectory visualization in Gazebo.
+Turn-then-go speed shaping
 
-📊 Results
-
-The implementation of Adaptive Lookahead guidance successfully eliminated the "saw-tooth" RPM spikes commonly found in traditional waypoint-switching logic. This resulted in a significantly smoother propulsion profile, reduced mechanical stress on thrusters, and stable vessel behavior during complex docking maneuvers.
-
-🤝 Contributor
-
-Gehan Kavinda Dasanayake
-
-Research Project - Carinthia University of Applied Sciences
+Real-time ROS topic integration
