@@ -61,8 +61,6 @@ This project integrates:
 
 ## 🧠 System Architecture
 
-> ✅ GitHub Mermaid-compatible diagram (labels are quoted to avoid parse errors)
-
 ```mermaid
 flowchart LR
   P["Path / Markers"] --> G["Adaptive Circular LOS"]
