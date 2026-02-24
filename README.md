@@ -324,13 +324,14 @@ ros2 topic echo /wamv/thrusters/left/thrust
 ## 👨‍🎓 Author
 
 **Gehan Kavinda Dasanayake**  
-GitHub: https://github.com/kavindagehan  
-Research Project – Carinthia University of Applied Sciences
+Research Project – Carinthia University of Applied Sciences  
+
+- GitHub: https://github.com/kavindagehan  
+- LinkedIn: https://www.linkedin.com/in/kavindagehan/
 
 ---
 
 ## 📜 License
 
 This project is licensed under the MIT License.
-
 See the LICENSE file for details.
