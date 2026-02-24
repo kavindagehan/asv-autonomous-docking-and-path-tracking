@@ -348,5 +348,6 @@ Research Project – Carinthia University of Applied Sciences
 
 ## 📜 License
 
-This repository is intended for **academic and research purposes**.  
-If you plan to reuse or redistribute this work beyond academic use, please contact the author.
+This project is licensed under the MIT License.
+
+See the LICENSE file for details.
