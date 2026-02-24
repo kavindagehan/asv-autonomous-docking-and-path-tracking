@@ -24,6 +24,21 @@ This project integrates:
 
 ---
 
+## 🎥 Simulation Demonstration (2 min)
+
+The video below demonstrates:
+
+- Adaptive LOS path tracking  
+- Smooth differential thrust control  
+- Turn-then-go maneuvering  
+- Precision zero-overshoot docking  
+
+[![Autonomous ASV Docking Demo](https://img.youtube.com/vi/YOUR_VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
+
+▶ Click the image above to watch the full VRX simulation demo.
+
+---
+
 ## 📌 Table of Contents
 
 - [Key Features](#-key-features)
