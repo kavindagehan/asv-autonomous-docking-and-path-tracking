@@ -1,0 +1,48 @@
+# =========================
+# MATLAB
+# =========================
+*.asv
+*.m~
+*.autosave
+*.slxc
+*.bak
+*.log
+*.mex*
+*.p
+*.fig
+
+# Simulink generated folders
+slprj/
+sccprj/
+work/
+*_rtw/
+codegen/
+
+# MATLAB Live Script temp
+*.mlx.autosave
+
+# =========================
+# ROS / Python
+# =========================
+__pycache__/
+*.pyc
+*.pyo
+*.swp
+
+# ROS build folders (if any)
+build/
+devel/
+install/
+log/
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Editor / IDE
+# =========================
+.vscode/
+.idea/
