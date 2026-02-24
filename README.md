@@ -242,6 +242,7 @@ grep -n "START-MARKERS\|END-MARKERS" "$VRX_WORLDS_DIR/sydney_regatta.sdf"
 ---
 
 ## ▶️ Execution Order
+> Path injection is performed automatically when running: `ASV_SIM_ROS_MAIN_V2_1.mlx`.
 
 ### 1) Open MATLAB / Simulink
 
