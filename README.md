@@ -1,71 +1,39 @@
-# 🚤 Autonomous ASV Docking and Path Tracking  
-### MATLAB/Simulink & ROS 2 / Gazebo Integration
+## 🛠 Requirements
 
-This repository presents a complete **Guidance, Navigation, and Control (GNC)** system for a **WAM-V Catamaran**.
+### System
+- **Ubuntu 24.04 LTS**
+- **ROS 2 Jazzy**
+- **Gazebo Harmonic**
+- **VRX (Virtual RobotX) simulator** (must be installed before running co-simulation)
 
-The project integrates a 3-DOF vessel model with high-fidelity physics simulation in the **VRX (Virtual RobotX)** environment, enabling smooth path tracking and precision autonomous docking.
+### MATLAB / Simulink
+You will need MATLAB + Simulink and the following toolboxes (depending on your model configuration):
 
----
+- Simulink
+- Simulink Control Design
+- Control System Toolbox
+- Robotics System Toolbox (ROS 2 / ROS interface)
+- Navigation Toolbox (path / guidance utilities, if used)
+- Signal Processing Toolbox (filtering / smoothing, if used)
+- (Add any other toolboxes you actually used in your models)
 
-## ✨ Key Features
-
-- **Adaptive Lookahead Guidance**  
-  Dynamically adjusts tracking radius for smooth and stable path convergence.
-
-- **Smooth RPM Profile (No Spikes)**  
-  Eliminates oscillatory thrust behavior common in waypoint-switching methods.
-
-- **Distance-Based Docking Deceleration**  
-  Nonlinear velocity shaping ensures controlled, zero-overshoot berthing.
-
-- **Turn-Then-Go Speed Strategy**  
-  Reduces surge velocity during large heading errors for safe maneuvering.
-
-- **Real-Time Simulink–ROS 2 Integration**  
-  High-frequency thrust commands with live GPS and IMU feedback from Gazebo.
-
----
-
-## 🧠 System Architecture
-
-```
-Path → Adaptive Guidance → Heading & Speed Control → Thrust Mixing → ASV Model → Feedback
-```
-
-### Control Strategy Overview
-
-- Continuous path tracking (no discrete waypoint jumps)
-- Adaptive lookahead radius near docking zone
-- Heading latch during final approach to avoid instability
-- Differential thrust mixing for twin-hull propulsion
-
----
-
-## 📊 Performance Improvements
-
-The Adaptive Lookahead strategy eliminates the classic **“saw-tooth” RPM oscillations** seen in baseline waypoint controllers.
-
-| Metric | Baseline (Waypoint) | Optimized (Adaptive LOS) |
-|--------|---------------------|---------------------------|
-| Steering Stability | High-frequency jitter | Smooth transition |
-| Docking Accuracy | Overshoot | Zero-overshoot stopping |
-| RPM Behavior | Oscillatory | Stable ramp-down |
-
----
-
-## 🛠 Tech Stack
-
-- **OS:** Ubuntu 24.04 LTS  
-- **Middleware:** ROS 2 Jazzy  
-- **Modeling:** MATLAB & Simulink  
-- **Simulation:** Gazebo Harmonic + VRX  
-- **Automation:** Python (Gazebo XML path injection)
+> Tip: In MATLAB, run `ver` to list installed toolboxes.
 
 ---
 
 ## 🚀 Installation & Setup
 
-### Clone Repository
+### 1️⃣ Install VRX (Required)
+
+This project uses the **OSRF VRX simulator**. Install and verify VRX first by following the official instructions in the VRX repository:
+
+- https://github.com/osrf/vrx
+
+Make sure you can launch a VRX world successfully before continuing.
+
+---
+
+### 2️⃣ Clone This Repository
 
 ```bash
 git clone https://github.com/your-username/asv-autonomous-docking-and-path-tracking.git
@@ -74,12 +42,26 @@ cd asv-autonomous-docking-and-path-tracking
 
 ---
 
-### MATLAB Setup
+### 3️⃣ ROS 2 Environment
+
+Source ROS 2 Jazzy:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+```
+
+(If you built VRX in a workspace) source your workspace as well:
+
+```bash
+source ~/vrx_ws/install/setup.bash
+```
+
+---
+
+### 4️⃣ MATLAB Setup
 
 1. Open MATLAB
-2. Install:
-   - ROS Toolbox  
-   - Control System Toolbox  
+2. Ensure required toolboxes are installed
 3. Add project to path:
 
 ```matlab
@@ -88,32 +70,12 @@ addpath(genpath(pwd))
 
 ---
 
-### ROS 2 Setup
+## ▶️ Run Order (Important)
 
-Ensure ROS 2 Jazzy is installed:
+1. **Start VRX / Gazebo** (ROS 2 + simulation running)
+2. **Start Simulink model** (controller publishes thrust commands and subscribes to GPS/IMU)
+3. Confirm ROS topics are live (GPS/IMU in, thruster commands out)
 
 ```bash
-source /opt/ros/jazzy/setup.bash
+ros2 topic list
 ```
-
-Launch the VRX simulation before running Simulink co-simulation.
-
----
-
-## 📂 Project Structure
-
-```
-/matlab_simulink   → Simulink controller models
-/scripts           → Gazebo XML automation tools
-/docs              → Technical documentation
-/results           → Plots and simulation captures
-```
-
----
-
-## 👨‍🎓 Author
-
-**Gehan Kavinda Dasanayake**  
-Research Project – Carinthia University of Applied Sciences
-
----
