@@ -3,9 +3,12 @@
 
 [![ROS 2](https://img.shields.io/badge/ROS%202-Jazzy-22314E?logo=ros&logoColor=white)](https://docs.ros.org/en/jazzy/)
 [![MATLAB](https://img.shields.io/badge/MATLAB-R2025b-0076A8?logo=mathworks&logoColor=white)](https://www.mathworks.com/products/matlab.html)
+[![Simulink](https://img.shields.io/badge/Simulink-Model--Based%20Design-0076A8?logo=mathworks&logoColor=white)](https://www.mathworks.com/products/simulink.html)
 [![Gazebo](https://img.shields.io/badge/Gazebo-Harmonic-6E2CF2?logo=gazebo&logoColor=white)](https://gazebosim.org/)
+[![Ubuntu](https://img.shields.io/badge/Ubuntu-24.04%20LTS-E95420?logo=ubuntu&logoColor=white)](https://ubuntu.com/)
+[![VRX](https://img.shields.io/badge/VRX-Virtual%20RobotX-0B7285)](https://github.com/osrf/vrx)
 
-A complete **Guidance, Navigation, and Control (GNC)** framework for a **WAM‑V Catamaran Autonomous Surface Vessel (ASV)**, validated in the **VRX (Virtual RobotX)** simulation environment.
+A complete **Guidance, Navigation, and Control (GNC)** framework for a **WAM‑V Catamaran Autonomous Surface Vessel (ASV)**.
 
 This project integrates:
 
@@ -13,10 +16,10 @@ This project integrates:
 - Adaptive Circular Line‑of‑Sight (LOS) guidance  
 - PD‑based heading control  
 - Surge velocity regulation  
-- Differential thrust mixing  
-- High‑fidelity simulation in **Gazebo (VRX)** with **ROS 2** feedback  
+- Differential thrust mixing (twin thrusters)  
+- High‑fidelity validation in the **VRX (Virtual RobotX)** simulation environment  
 
-✅ Achieves smooth path tracking and precision autonomous docking **without RPM discontinuities**.
+✅ Smooth path tracking and precision autonomous docking **without RPM discontinuities**.
 
 ---
 
@@ -26,11 +29,10 @@ This project integrates:
 - [System Architecture](#-system-architecture)
 - [Performance Improvements](#-performance-improvements)
 - [System Requirements](#-system-requirements)
+- [Repository Layout](#-repository-layout)
 - [Installation & Setup](#-installation--setup)
-- [VRX World File Configuration](#-vrx-world-file-configuration)
-- [Dynamic Path Injection](#-dynamic-path-injection)
 - [Execution Order](#-execution-order)
-- [Project Structure](#-project-structure)
+- [Dynamic Path Injection](#-dynamic-path-injection)
 - [ROS Interface](#-ros-interface)
 - [Notes](#-notes)
 - [Author](#-author)
@@ -47,7 +49,7 @@ This project integrates:
   Eliminates saw‑tooth RPM oscillations caused by discrete waypoint jumps.
 
 - **Distance‑Based Docking Deceleration**  
-  Square‑root velocity shaping for precise, zero‑overshoot stopping near the dock.
+  Square‑root velocity shaping for precise, zero‑overshoot stopping.
 
 - **Turn‑Then‑Go Strategy**  
   Reduces surge speed during large heading errors for safe maneuvering.
@@ -101,9 +103,7 @@ The Adaptive LOS strategy removes classical RPM spikes seen in waypoint‑switch
 - ROS 2 Jazzy  
 - Gazebo Harmonic  
 - VRX Simulator (`vrx_gz`)  
-  - Repository: https://github.com/osrf/vrx  
-
----
+  - https://github.com/osrf/vrx  
 
 ### 📦 MATLAB / Simulink Requirements
 
@@ -126,23 +126,42 @@ ver
 
 ---
 
-## 🚀 Installation & Setup
+## 📂 Repository Layout
 
-### 1) Install VRX (Mandatory)
+✅ Your modified VRX world file **must be included in this repo** (version controlled) at:
 
-Follow the official VRX instructions:
+```text
+vrx_world/sydney_regatta.sdf
+```
 
-- https://github.com/osrf/vrx
+Recommended structure:
 
-Verify Gazebo launches:
-
-```bash
-ros2 launch vrx_gz competition.launch.py
+```text
+asv-autonomous-docking-and-path-tracking/
+├── src/
+│   ├── functions/
+│   └── main/
+├── scripts/
+│   └── update_path_sydney_regatta.py
+├── vrx_world/
+│   └── sydney_regatta.sdf          ✅ (modified world file)
+├── docs/
+└── results/
 ```
 
 ---
 
-### 2) Clone This Repository
+## 🚀 Installation & Setup
+
+### 1️⃣ Install VRX (Mandatory)
+
+Follow official VRX instructions:
+
+- https://github.com/osrf/vrx
+
+---
+
+### 2️⃣ Clone This Repository
 
 ```bash
 git clone https://github.com/kavindagehan/asv-autonomous-docking-and-path-tracking.git
@@ -151,7 +170,7 @@ cd asv-autonomous-docking-and-path-tracking
 
 ---
 
-### 3) Source ROS 2 Environment
+### 3️⃣ Source ROS 2 (and VRX workspace if applicable)
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -165,72 +184,104 @@ source ~/vrx_ws/install/setup.bash
 
 ---
 
-## 🗺 VRX World File Configuration
+### 4️⃣ Replace VRX `sydney_regatta.sdf` (REQUIRED — do this BEFORE MATLAB Setup)
 
-This project requires a modified base version of `sydney_regatta.sdf`.
-
-The world file **must** contain the following marker tags:
+This project depends on a modified `sydney_regatta.sdf` that contains the marker tags:
 
 ```xml
 <!-- START-MARKERS -->
 <!-- END-MARKERS -->
 ```
 
-These tags enable **dynamic path injection**.
+These tags are required for **dynamic path injection**.
 
-### One‑Time Setup
+#### 4.1 Locate your VRX worlds directory
 
-Navigate to the VRX world directory:
+**Case A — VRX built from source (common):**
 
 ```bash
-cd ~/vrx_ws/src/vrx/vrx_gz/worlds/
+VRX_WORLDS_DIR=~/vrx_ws/src/vrx/vrx_gz/worlds
 ```
 
-Backup the original file:
+**Case B — VRX available via package share directory:**
 
 ```bash
+VRX_WORLDS_DIR="$(ros2 pkg prefix vrx_gz)/share/vrx_gz/worlds"
+```
+
+Verify:
+
+```bash
+ls "$VRX_WORLDS_DIR"
+```
+
+> ⚠️ If `VRX_WORLDS_DIR` points into a system directory, you may need admin permissions to overwrite files.
+> Using a workspace build (Case A) is usually the cleanest approach.
+
+#### 4.2 Backup the original world file
+
+```bash
+cd "$VRX_WORLDS_DIR"
 mv sydney_regatta.sdf sydney_regatta_original.sdf
 ```
 
-Copy the modified base world file from this repository:
+#### 4.3 Copy the modified world file from this repository
+
+Run this from the **repo root**:
 
 ```bash
-cp vrx_world/sydney_regatta.sdf ~/vrx_ws/src/vrx/vrx_gz/worlds/
+cp vrx_world/sydney_regatta.sdf "$VRX_WORLDS_DIR/"
 ```
+
+#### 4.4 Quick validation (confirm marker tags exist)
+
+```bash
+grep -n "START-MARKERS\|END-MARKERS" "$VRX_WORLDS_DIR/sydney_regatta.sdf"
+```
+
+✅ If both markers are printed, the world file is correctly installed.
 
 ---
 
-## 🔁 Dynamic Path Injection
+### 5️⃣ MATLAB / Simulink Setup
 
-Before launching the simulation, run:
+1. Open MATLAB
+2. Confirm required toolboxes are installed:
 
-```bash
-python3 scripts/update_path_sydney_regatta.py
-```
+   ```matlab
+   ver
+   ```
 
-This script replaces the content between `START-MARKERS` and `END-MARKERS` and injects path markers dynamically.
+3. Open your main Simulink controller model (in `/src/main` or your project’s main model directory)
+4. Ensure ROS 2 network/domain settings match your VRX environment if required.
 
 ---
 
 ## ▶️ Execution Order
 
-1. Launch VRX / Gazebo:
+Use this order to avoid missing markers / missing path injection:
+
+1. **(One-time)** Replace VRX `sydney_regatta.sdf` in the VRX environment  
+2. Inject the path markers:
+
+   ```bash
+   python3 scripts/update_path_sydney_regatta.py
+   ```
+
+3. Launch VRX / Gazebo:
 
    ```bash
    ros2 launch vrx_gz competition.launch.py
    ```
 
-2. Confirm ROS topics:
+4. Confirm ROS topics:
 
    ```bash
    ros2 topic list
    ```
 
-3. Open MATLAB / Simulink.
-
-4. Run the main controller model (Simulink).
-
-5. Verify thrust publishing:
+5. Run MATLAB / Simulink controller model  
+6. Verify thrust publishing:
 
    ```bash
    ros2 topic echo /wamv/thrusters/left/thrust
@@ -238,18 +289,15 @@ This script replaces the content between `START-MARKERS` and `END-MARKERS` and i
 
 ---
 
-## 📂 Project Structure
+## 🔁 Dynamic Path Injection
 
-```text
-/src
- ├── functions
- ├── main
- └── scripts
+Before launching the simulation:
 
-/vrx_world
-/docs
-/results
+```bash
+python3 scripts/update_path_sydney_regatta.py
 ```
+
+This script replaces the content between `<!-- START-MARKERS -->` and `<!-- END-MARKERS -->` in the VRX world file and injects path markers dynamically.
 
 ---
 
