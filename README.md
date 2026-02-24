@@ -1,23 +1,41 @@
-# Autonomous ASV Docking and Path Tracking
-### MATLAB/Simulink & ROS 2 / Gazebo Integration
+Autonomous ASV Docking and Path Tracking
+
+MATLAB/Simulink & ROS 2 / Gazebo Integration
 
 This repository features a Guidance, Navigation, and Control (GNC) system for a WAM-V Catamaran. The project bridges the gap between 3-DOF mathematical modeling and high-fidelity physics simulation.
 
-## 🚢 Project Highlights
-* [cite_start]**Mathematical Modeling:** Implemented 3-DOF planar dynamics accounting for added mass and hydrodynamic drag coefficients[cite: 67, 365].
-* [cite_start]**Adaptive LOS Guidance:** Developed a "Rabbit" pursuit algorithm using quadratic circle-path intersection for non-oscillatory path following[cite: 172, 412].
-* **Precision Docking Logic:**
-    * [cite_start]**SQRT Velocity Profile:** Used a non-linear deceleration curve to manage vessel inertia and prevent overshoot[cite: 226, 251].
-    * [cite_start]**Heading Latch:** Freezes reference heading at 3.5m to eliminate mathematical singularities at the docking point[cite: 243, 429].
-* [cite_start]**Simulink-ROS Architecture:** Real-time co-simulation using the MATLAB ROS Toolbox to subscribe to GPS/IMU topics and publish thrust commands[cite: 565, 566].
+🚢 Project Highlights
 
-## 🛠 Tech Stack
-* [cite_start]**MATLAB & Simulink:** Controller design and path generation[cite: 13, 17].
-* [cite_start]**ROS 2 & Gazebo:** High-fidelity marine environment (VRX)[cite: 550, 552].
-* [cite_start]**Python:** Automated XML injection for 3D trajectory visualization in Gazebo.
+Mathematical Modeling: Implemented 3-DOF planar dynamics for a catamaran platform, accounting for added mass and hydrodynamic drag coefficients.
 
-## 📊 Results
-[cite_start]The transition to Adaptive Lookahead guidance eliminated the "saw-tooth" RPM spikes found in traditional waypoint switching, resulting in a smooth propulsion profile and stable berthing[cite: 146, 185, 517].
+Adaptive LOS Guidance: Developed a "Rabbit" pursuit algorithm using quadratic circle-path intersection for smooth, non-oscillatory path following.
 
-## 🤝 Contributor
-* [cite_start]**Gehan Kavinda Dasanayake** [cite: 11]
+Precision Docking Logic:
+
+SQRT Velocity Profile: Utilized a non-linear deceleration curve to manage vessel inertia and ensure a precise "soft landing" at the dock.
+
+Heading Latch: Freezes the reference heading at a 3.5m radius to eliminate mathematical singularities and sensor jitter during the final berthing approach.
+
+Simulink-ROS Architecture: Real-time co-simulation using the MATLAB ROS Toolbox to subscribe to navigation topics (GPS/IMU) and publish high-frequency thrust commands.
+
+🛠 Tech Stack
+
+Operating System: Ubuntu 24.04 LTS (Noble Numbat)
+
+Middleware: ROS 2 Jazzy Jalisco
+
+Software: MATLAB & Simulink R2025b
+
+Simulation: Gazebo Harmonic / VRX (Virtual RobotX)
+
+Automation: Python-based XML injection for 3D trajectory visualization in Gazebo.
+
+📊 Results
+
+The implementation of Adaptive Lookahead guidance successfully eliminated the "saw-tooth" RPM spikes commonly found in traditional waypoint-switching logic. This resulted in a significantly smoother propulsion profile, reduced mechanical stress on thrusters, and stable vessel behavior during complex docking maneuvers.
+
+🤝 Contributor
+
+Gehan Kavinda Dasanayake
+
+Research Project - Carinthia University of Applied Sciences
