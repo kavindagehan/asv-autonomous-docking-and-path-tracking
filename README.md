@@ -81,18 +81,6 @@ flowchart LR
 
 ---
 
-## 📊 Performance Improvements
-
-The Adaptive LOS strategy removes classical RPM spikes seen in waypoint‑switching controllers.
-
-| Metric | Baseline (Waypoint Switching) | Adaptive Circular LOS |
-|--------|-------------------------------|------------------------|
-| Steering Stability | High‑frequency jitter | Smooth heading transition |
-| Docking Accuracy | Overshoot | Zero‑overshoot stop |
-| RPM Behavior | Saw‑tooth oscillations | Smooth ramp‑down |
-
----
-
 ## 🛠 System Requirements
 
 ### 🖥 Operating System
